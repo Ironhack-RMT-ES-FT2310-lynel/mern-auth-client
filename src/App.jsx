@@ -10,6 +10,8 @@ import NotFound from "./pages/error/NotFound"
 
 // components
 import Navbar from "./components/Navbar"
+import PrivatePageExample from "./pages/PrivatePageExample";
+import IsPrivate from "./components/IsPrivate";
 
 function App() {
 
@@ -24,6 +26,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+
+        {/* rutas privadas */}
+        <Route path="/private" element={ <IsPrivate> <PrivatePageExample /> </IsPrivate> }/>
 
         {/* error FE routes */}
         <Route path="/error" element={<Error />} />

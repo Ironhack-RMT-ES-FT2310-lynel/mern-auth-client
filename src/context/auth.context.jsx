@@ -13,6 +13,7 @@ function AuthWrapper(props) {
   // aqui los estados a compartir por contexto
   const [ isLoggedIn, setIsLoggedIn ] = useState(false)
   const [ isLoading, setIsLoading ] = useState(true)
+  const [ loggedUser, setLoggedUser ] = useState(null)
 
   const authenticateUser = async () => {
     // esta funcion va a enviar el token a backend para validarlo
@@ -28,12 +29,13 @@ function AuthWrapper(props) {
       console.log(response)
       setIsLoggedIn(true)
       setIsLoading(false)
-
+      setLoggedUser(response.data.payload)
     } catch (error) {
       // si el codigo llega a este punto (401) significa que el token no es valido o no existe
       console.log(error)
       setIsLoggedIn(false)
       setIsLoading(false)
+      setLoggedUser(null)
     }
   }
 
@@ -43,7 +45,8 @@ function AuthWrapper(props) {
   }, [])
 
   const passedContext = {
-    authenticateUser
+    authenticateUser,
+    isLoggedIn
   }
 
   if (isLoading) {
