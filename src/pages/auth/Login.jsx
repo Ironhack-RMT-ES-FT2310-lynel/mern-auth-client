@@ -1,9 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import service from "../../services/config";
 
 function Login() {
 
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [ errorMessage, setErrorMessage ] = useState("")
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -12,6 +18,25 @@ function Login() {
     e.preventDefault();
 
     // ... contactar al backend para validar credenciales de usuario aqui
+    try {
+      
+      const credentials = { email, password }
+
+      const response = await service.post("/auth/login", credentials)
+      console.log(response)
+
+      // este token lo vamos a almacenar de una forma segura en ese localStorage
+
+      navigate("/") //! esto solo como prueba. Luego cambiará
+
+    } catch (error) {
+      console.log(error)
+      if (error.response.status === 400) {
+        setErrorMessage(error.response.data.errorMessage)
+      } else {
+        navigate("/error") // 500
+      }
+    }
   };
 
   return (
@@ -43,6 +68,8 @@ function Login() {
         <button type="submit">Acceder</button>
       </form>
       
+      <p style={{color: "red"}}>{errorMessage}</p>
+
     </div>
   );
 }
