@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import service from "../../services/config";
+import { AuthContext } from "../../context/auth.context";
 
 function Login() {
+
+  const { authenticateUser } = useContext( AuthContext )
 
   const navigate = useNavigate()
 
@@ -26,6 +29,10 @@ function Login() {
       console.log(response)
 
       // este token lo vamos a almacenar de una forma segura en ese localStorage
+
+      localStorage.setItem("authToken", response.data.authToken)
+
+      await authenticateUser() // authenticateUser es asincrona y queremos ejecutarla antes de redireccionar al usuario
 
       navigate("/") //! esto solo como prueba. Luego cambiará
 
